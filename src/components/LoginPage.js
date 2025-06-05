@@ -2,18 +2,18 @@ import { useState } from 'react';
 import axios from 'axios';
 import './LoginPage.css';
 import bmwImage from '../assets/bmw.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; 
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // 👈 Activamos navegación
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8083/auth/login', {
+      const response = await axios.post(`${process.env.REACT_APP_API_AUTH_URL}/auth/login`, {
         email,
         password,
       });
@@ -28,9 +28,7 @@ function LoginPage() {
 
       console.log('Login exitoso. Bienvenido/a,', nombre);
 
-      // Redirigir a la página de tareas
       navigate('/tareas');
-
     } catch (error) {
       console.error('Error en el login:', error);
       alert('Credenciales incorrectas o error de conexión con el servidor.');
@@ -56,7 +54,7 @@ function LoginPage() {
             <div className="rounded-circle bg-danger text-white d-inline-block p-3">
               <i className="bi bi-lock-fill fs-4"></i>
             </div>
-            <h2 className="mt-2">Acceder</h2>
+            <h2 className="mt-2">Gestión de Usuarios</h2>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -88,8 +86,8 @@ function LoginPage() {
           </form>
 
           <div className="d-flex justify-content-between mt-3">
-            <a href="#" className="small">¿Olvidó su contraseña?</a>
-            <a href="#" className="small">¿No tienes cuenta? Regístrate</a>
+          <Link to="/recuperar" className="small">¿Olvidó su contraseña?</Link>
+            <Link to="/registro" className="small">¿No tienes cuenta? Regístrate</Link>
           </div>
         </div>
       </div>
