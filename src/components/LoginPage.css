@@ -1,0 +1,10 @@
+.login-container {
+    height: 100vh;
+  }
+  
+  @media (max-width: 768px) {
+    .login-image {
+      display: none;
+    }
+  }
+  
