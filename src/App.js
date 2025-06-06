@@ -3,8 +3,7 @@ import LoginPage from './components/LoginPage';
 import TareasPage from './components/TareasPage';
 import Registro from './components/Registro';
 import RecuperarPassword from './components/RecuperarPassword';
-
-
+import RestablecerPassword from './components/RestablecerPassword';
 
 function App() {
   return (
@@ -14,6 +13,7 @@ function App() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/tareas" element={<TareasPage />} />
         <Route path="/recuperar" element={<RecuperarPassword />} />
+        <Route path="/restablecer" element={<RestablecerPassword />} />
       </Routes>
     </Router>
   );
