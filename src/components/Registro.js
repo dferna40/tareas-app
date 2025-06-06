@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import bmwImage from '../assets/bmw.png';
 
 function Registro() {
@@ -8,8 +8,20 @@ function Registro() {
     email: '',
     password: '',
     confirmarPassword: '',
+    puestoId: '',
     aceptarTerminos: false,
   });
+
+  const [puestos, setPuestos] = useState([]);
+  const navigate = useNavigate();
+
+  // Cargar puestos desde la API
+  useEffect(() => {
+    fetch('http://localhost:8082/puestos')
+      .then(res => res.json())
+      .then(data => setPuestos(data))
+      .catch(err => console.error('Error al cargar puestos:', err));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -19,7 +31,7 @@ function Registro() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.aceptarTerminos) {
@@ -27,7 +39,74 @@ function Registro() {
       return;
     }
 
-    console.log('Formulario de registro enviado:', form);
+    if (form.password !== form.confirmarPassword) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+
+    if (!form.puestoId) {
+      alert('Debes seleccionar un puesto.');
+      return;
+    }
+
+    try {
+      // Paso 1: Registro técnico en auth-service
+      const registroResponse = await fetch('http://localhost:8083/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: form.nombre,
+          email: form.email,
+          password: form.password
+        }),
+      });
+
+      if (!registroResponse.ok) {
+        const errorText = await registroResponse.text();
+        throw new Error(`Error en auth-service: ${errorText}`);
+      }
+
+      const registroData = await registroResponse.json();
+      const token = registroData.token;
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('nombre', registroData.nombre);
+      localStorage.setItem('email', registroData.email);
+      localStorage.setItem('role', registroData.role);
+
+      // Paso 2: Crear perfil de usuario en api-tareas
+      const perfilPayload = {
+        nombre: form.nombre,
+        email: form.email,
+        puestoId: Number(form.puestoId)
+      };
+
+      console.log("➡ Enviando a api-tareas:", perfilPayload);
+
+      const perfilResponse = await fetch('http://localhost:8082/usuarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(perfilPayload),
+      });
+
+      if (!perfilResponse.ok) {
+        const errorText = await perfilResponse.text();
+        throw new Error(`Error en api-tareas: ${errorText}`);
+      }
+
+      const perfilData = await perfilResponse.json();
+      console.log('Perfil creado correctamente:', perfilData);
+
+      alert('¡Registro completo!');
+      navigate('/');
+
+    } catch (err) {
+      console.error('Error durante el registro:', err.message);
+      alert('Error durante el registro: ' + err.message);
+    }
   };
 
   return (
@@ -75,6 +154,24 @@ function Registro() {
                 onChange={handleChange}
                 required
               />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Puesto *</label>
+              <select
+                className="form-control"
+                name="puestoId"
+                value={form.puestoId}
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Selecciona un puesto --</option>
+                {puestos.map((puesto) => (
+                  <option key={puesto.id} value={puesto.id}>
+                    {puesto.nombre}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="mb-3">

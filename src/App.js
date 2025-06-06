@@ -4,6 +4,7 @@ import TareasPage from './components/TareasPage';
 import Registro from './components/Registro';
 import RecuperarPassword from './components/RecuperarPassword';
 import RestablecerPassword from './components/RestablecerPassword';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/tareas" element={<TareasPage />} />
         <Route path="/recuperar" element={<RecuperarPassword />} />
         <Route path="/restablecer" element={<RestablecerPassword />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

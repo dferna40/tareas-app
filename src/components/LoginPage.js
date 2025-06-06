@@ -28,7 +28,7 @@ function LoginPage() {
 
       console.log('Login exitoso. Bienvenido/a,', nombre);
 
-      navigate('/tareas');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error en el login:', error);
       alert('Credenciales incorrectas o error de conexión con el servidor.');
@@ -54,7 +54,7 @@ function LoginPage() {
             <div className="rounded-circle bg-danger text-white d-inline-block p-3">
               <i className="bi bi-lock-fill fs-4"></i>
             </div>
-            <h2 className="mt-2">Gestión de Usuarios</h2>
+            <h2 className="mt-2">Acceder a Gestión de Usuarios</h2>
           </div>
 
           <form onSubmit={handleSubmit}>
