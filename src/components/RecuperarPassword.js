@@ -9,7 +9,8 @@ function RecuperarPassword() {
     e.preventDefault();
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_AUTH_URL}/auth/recuperar-password`, {
+      // ✅ Ruta relativa que Nginx redirige a backend:8083
+      await axios.post('/auth/recuperar-password', {
         email: email
       });
 

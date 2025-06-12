@@ -13,7 +13,8 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_AUTH_URL}/auth/login`, {
+      // ✅ Usar ruta relativa para que Nginx la redirija a auth-service
+      const response = await axios.post('/auth/login', {
         email,
         password,
       });
@@ -86,7 +87,7 @@ function LoginPage() {
           </form>
 
           <div className="d-flex justify-content-between mt-3">
-          <Link to="/recuperar" className="small">¿Olvidó su contraseña?</Link>
+            <Link to="/recuperar" className="small">¿Olvidó su contraseña?</Link>
             <Link to="/registro" className="small">¿No tienes cuenta? Regístrate</Link>
           </div>
         </div>

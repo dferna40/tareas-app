@@ -15,9 +15,9 @@ function Registro() {
   const [puestos, setPuestos] = useState([]);
   const navigate = useNavigate();
 
-  // Cargar puestos desde la API
+  // Cargar puestos desde la API (redirige a api_tareas vía Nginx)
   useEffect(() => {
-    fetch('http://localhost:8082/puestos')
+    fetch('/api/puestos')
       .then(res => res.json())
       .then(data => setPuestos(data))
       .catch(err => console.error('Error al cargar puestos:', err));
@@ -51,7 +51,7 @@ function Registro() {
 
     try {
       // Paso 1: Registro técnico en auth-service
-      const registroResponse = await fetch('http://localhost:8083/auth/register', {
+      const registroResponse = await fetch('/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -83,7 +83,7 @@ function Registro() {
 
       console.log("➡ Enviando a api-tareas:", perfilPayload);
 
-      const perfilResponse = await fetch('http://localhost:8082/usuarios', {
+      const perfilResponse = await fetch('/api/usuarios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

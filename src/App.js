@@ -5,17 +5,34 @@ import Registro from './components/Registro';
 import RecuperarPassword from './components/RecuperarPassword';
 import RestablecerPassword from './components/RestablecerPassword';
 import Dashboard from './components/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/">
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/registro" element={<Registro />} />
-        <Route path="/tareas" element={<TareasPage />} />
         <Route path="/recuperar" element={<RecuperarPassword />} />
         <Route path="/restablecer" element={<RestablecerPassword />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Rutas protegidas */}
+        <Route
+          path="/tareas"
+          element={
+            <ProtectedRoute>
+              <TareasPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

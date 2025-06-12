@@ -26,7 +26,8 @@ function RestablecerPassword() {
     }
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_AUTH_URL}/auth/restablecer-password`, {
+      // ✅ Ruta relativa para que Nginx lo redirija a auth-service (8083)
+      await axios.post('/auth/restablecer-password', {
         token,
         nuevaPassword
       });
